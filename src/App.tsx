@@ -1,34 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useContext, useReducer, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
+import { TestContext, useTestContext } from "./context";
+import { testReducer, testReducerInitialState } from "./reducers/testReducer";
+import { TestReducerActions } from "./reducers/testReducer";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const testContext = useTestContext();
+  const [state, dispatch] = useReducer(testReducer, testReducerInitialState);
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <h2>Understanding React Reducer & Contexts.</h2>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <p>Foo is {state.foo}</p>
+        <p>Bar is {state.bar}</p>
+        <button
+          onClick={() => {
+            dispatch({
+              payload: "foo",
+              type: TestReducerActions.setBar,
+            });
+          }}
+        >
+          Set bar
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button
+          onClick={() => {
+            dispatch({
+              payload: "bar",
+              type: TestReducerActions.unsetBar,
+            });
+          }}
+        >
+          Unset bar
+        </button>
+        <button
+          onClick={() => {
+            dispatch({
+              payload: "bar",
+              type: TestReducerActions.setFoo,
+            });
+          }}
+        >
+          Set Foo
+        </button>
+        <button
+          onClick={() => {
+            dispatch({
+              payload: "foo",
+              type: TestReducerActions.unsetFoo,
+            });
+          }}
+        >
+          Unset foo
+        </button>
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Test Context is {testContext.bar ? testContext.bar : "undefined"} &{" "}
+        {testContext.foo ? testContext.foo : "undefined"}
       </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
