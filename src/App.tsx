@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useContext, useReducer, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import { TestContext, TestDispatchContext } from './context/TestContext'
+import { TestReducerActions } from './reducers/TestReducer';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const states = useContext(TestContext);
+  const dispatch = useContext(TestDispatchContext)!;
 
   return (
     <div className="App">
@@ -17,12 +20,13 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        {states.bar}
+        <button onClick={() => {
+          dispatch({
+            type: TestReducerActions.SET_BAR,
+            payload: "asdasd"
+          })
+        }}>set bar</button>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
